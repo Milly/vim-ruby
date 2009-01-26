@@ -49,9 +49,9 @@ let s:skip_expr =
       \ "synIDattr(synID(line('.'),col('.'),1),'name') =~ '".s:syng_strcom."'"
 
 " Regex used for words that, at the start of a line, add a level of indent.
-let s:ruby_indent_keywords = '^\s*\zs\<\%(module\|class\|def\|if\|for' .
-      \ '\|while\|until\|else\|elsif\|case\|when\|unless\|begin\|ensure' .
-      \ '\|rescue\)\>' .
+let s:ruby_indent_keywords = '^\s*\zs\<\%(module\|class\|def\|for' .
+      \ '\|else\|elsif\|case\|when\|begin\|ensure\|rescue\)\>' .
+      \ '\|\%(\%^\|[^\\]\n\)\s*\zs\<\%(if\|unless\|while\|until\)\>' .
       \ '\|\%([*+/,=-]\|<<\|>>\|:\s\)\s*\zs' .
       \    '\<\%(if\|for\|while\|until\|case\|unless\|begin\)\>'
 
@@ -62,8 +62,8 @@ let s:ruby_deindent_keywords =
 " Regex that defines the start-match for the 'end' keyword.
 "let s:end_start_regex = '\%(^\|[^.]\)\<\%(module\|class\|def\|if\|for\|while\|until\|case\|unless\|begin\|do\)\>'
 " TODO: the do here should be restricted somewhat (only at end of line)?
-let s:end_start_regex = '^\s*\zs\<\%(module\|class\|def\|if\|for' .
-      \ '\|while\|until\|case\|unless\|begin\)\>' .
+let s:end_start_regex = '^\s*\zs\<\%(module\|class\|def\|for\|case\|begin\)\>' .
+      \ '\|\%(\%^\|[^\\]\n\)\s*\zs\<\%(if\|unless\|while\|until\)\>' .
       \ '\|\%([*+/,=-]\|<<\|>>\|:\s\)\s*\zs' .
       \    '\<\%(if\|for\|while\|until\|case\|unless\|begin\)\>' .
       \ '\|\<do\>'
@@ -177,7 +177,9 @@ function s:LineHasOpeningBrackets(lnum)
 endfunction
 
 function s:Match(lnum, regex)
-  let col = match(getline(a:lnum), a:regex) + 1
+  let last_escape = -1 != match(getline(a:lnum - 1), '^\%([^\\]\|\\.\)*\\$')
+  let line = (last_escape ? '\\\n' : '') . getline(a:lnum)
+  let col = match(line, a:regex) + (last_escape ? -1 : 1)
   return col > 0 && !s:IsInStringOrComment(a:lnum, col) ? col : 0
 endfunction
 
