@@ -199,10 +199,11 @@ if !exists("b:ruby_no_expensive") && !exists("ruby_no_expensive")
   syn region rubyBlock start="\<def\>"		matchgroup=rubyDefine end="\%(\<def\_s\+\)\@<!\<end\>" contains=ALLBUT,@rubyNotTop fold
   syn region rubyBlock start="\<class\>"	matchgroup=rubyClass  end="\<end\>" contains=ALLBUT,@rubyNotTop fold
   syn region rubyBlock start="\<module\>"	matchgroup=rubyModule end="\<end\>" contains=ALLBUT,@rubyNotTop fold
+  syn match  rubyLineEndEscape "\\$"         nextgroup=rubyConditionalModifier,rubyRepeatModifier skipwhite skipnl
 
   " modifiers
-  syn match  rubyConditionalModifier "\<\%(if\|unless\)\>"   display
-  syn match  rubyRepeatModifier	     "\<\%(while\|until\)\>" display
+  syn match  rubyConditionalModifier "\<\%(if\|unless\)\>"
+  syn match  rubyRepeatModifier	     "\<\%(while\|until\)\>"
 
   syn region rubyDoBlock matchgroup=rubyControl start="\<do\>" end="\<end\>" contains=ALLBUT,@rubyNotTop fold
   " curly bracket block or hash literal
