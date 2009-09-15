@@ -209,11 +209,14 @@ if !exists("b:ruby_no_expensive") && !exists("ruby_no_expensive")
   syn region rubyMethodBlock start="\<def\>"	matchgroup=rubyDefine end="\%(\<def\_s\+\)\@<!\<end\>" contains=ALLBUT,@rubyNotTop fold
   syn region rubyBlock  start="\<class\>"	matchgroup=rubyClass  end="\<end\>" contains=ALLBUT,@rubyNotTop fold
   syn region rubyBlock  start="\<module\>"	matchgroup=rubyModule end="\<end\>" contains=ALLBUT,@rubyNotTop fold
-  syn match  rubyLineEndEscape "\\$"         nextgroup=rubyConditionalModifier,rubyRepeatModifier skipwhite skipnl
+  syn match  rubyLineEndEscape "\\$"		nextgroup=@rubyModifier skipwhite skipnl transparent
 
   " modifiers
-  syn match  rubyConditionalModifier "\<\%(if\|unless\)\>"
-  syn match  rubyRepeatModifier	     "\<\%(while\|until\)\>"
+  syn match  rubyConditionalModifier "\<\%(if\|unless\)\>[?!]\@!"
+  syn match  rubyRepeatModifier	     "\<\%(while\|until\)\>[?!]\@!"
+  syn match  rubyExceptionalModifier "\<rescue\>[?!]\@!"
+
+  syn cluster rubyModifier contains=rubyConditionalModifier,rubyRepeatModifier,rubyExceptionalModifier
 
   syn region rubyDoBlock matchgroup=rubyControl start="\<do\>" end="\<end\>" contains=ALLBUT,@rubyNotTop fold
   " curly bracket block or hash literal
@@ -301,6 +304,7 @@ hi def link rubyFunction		Function
 hi def link rubyConditional		Conditional
 hi def link rubyConditionalModifier	rubyConditional
 hi def link rubyExceptional		rubyConditional
+hi def link rubyExceptionalModifier	rubyExceptional
 hi def link rubyRepeat			Repeat
 hi def link rubyRepeatModifier		rubyRepeat
 hi def link rubyOptionalDo		rubyRepeat
