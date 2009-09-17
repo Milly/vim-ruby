@@ -255,7 +255,7 @@ endif
 if !exists("ruby_no_special_methods")
   syn keyword rubyAccess    public protected private module_function
   " attr is a common variable name
-  syn match   rubyAttribute "\%(\%(^\|;\)\s*\)\@<=attr\>\(\s*[.=]\)\@!"
+  syn match   rubyAttribute "\%(\%(\%^\|;\|\\\@<!\n\)\s*\)\@<=attr\>\(\s*[.=]\)\@!"
   syn keyword rubyAttribute attr_accessor attr_reader attr_writer
   syn match   rubyControl   "\<\%(exit!\|\%(abort\|at_exit\|exit\|fork\|loop\|trap\)\>[?!]\@!\)"
   syn keyword rubyEval	    eval class_eval instance_eval module_eval
