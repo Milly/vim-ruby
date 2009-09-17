@@ -51,7 +51,7 @@ let s:skip_expr =
 " Regex used for words that, at the start of a line, add a level of indent.
 let s:ruby_indent_keywords =
       \ '^\s*\zs\<\%(module\|class\|def\|for\|else\|elsif\|case\|when\|begin\|ensure\)\>' .
-      \ '\|\%(\%^\|[^\\]\n\)\s*\zs\<\%(if\|unless\|while\|until\|rescue\)\>' .
+      \ '\|\%(\%^\|\\\@<!\n\)\s*\zs\<\%(if\|unless\|while\|until\|rescue\)\>' .
       \ '\|\%([*+/,=-]\|<<\|>>\|:\s\)\s*\zs' .
       \    '\<\%(if\|for\|while\|until\|case\|unless\|begin\)\>'
 
@@ -63,14 +63,14 @@ let s:ruby_deindent_keywords =
 "let s:end_start_regex = '\%(^\|[^.]\)\<\%(module\|class\|def\|if\|for\|while\|until\|case\|unless\|begin\|do\)\>'
 " TODO: the do here should be restricted somewhat (only at end of line)?
 let s:end_start_regex = '^\s*\zs\<\%(module\|class\|def\|for\|case\|begin\)\>' .
-      \ '\|\%(\%^\|^\n\|[^\\]\n\)\s*\zs\<\%(if\|unless\|while\|until\)\>' .
+      \ '\|\%(\%^\|\\\@<!\n\)\s*\zs\<\%(if\|unless\|while\|until\)\>' .
       \ '\|\%([*+/,=-]\|<<\|>>\|:\s\)\s*\zs' .
       \    '\<\%(if\|for\|while\|until\|case\|unless\|begin\)\>' .
       \ '\|\<do\>'
 
 " Regex that defines the middle-match for the 'end' keyword.
 let s:end_middle_regex = '\<\%(ensure\|else\|when\|elsif\)\>' .
-      \ '\|\%(\%(\%^\|;\|^\n\|[^\\]\n\)\s*\)\@<=\<rescue\>'
+      \ '\|\%(\%(\%^\|;\|\\\@<!\n\)\s*\)\@<=\<rescue\>'
 
 " Regex that defines the end-match for the 'end' keyword.
 let s:end_end_regex = '\%(^\|[^.:@$]\)\@<=\<end\>'
