@@ -180,7 +180,7 @@ endfunction
 function s:Match(lnum, regex)
   let last_escape = -1 != match(getline(a:lnum - 1), '^\%([^\\]\|\\.\)*\\$')
   let line = (last_escape ? '\\\n' : '') . getline(a:lnum)
-  let col = match(line, a:regex) + (last_escape ? -1 : 1)
+  let col = match(line, '\C'.a:regex) + (last_escape ? -1 : 1)
   return col > 0 && !s:IsInStringOrComment(a:lnum, col) ? col : 0
 endfunction
 
